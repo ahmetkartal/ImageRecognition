@@ -1,10 +1,59 @@
 import cv2
 import numpy as np
 import os
-
+from PyQt5.QtWidgets import QApplication, QPushButton,QMainWindow
+from PyQt5.QtCore import pyqtSlot
+from PyQt5 import QtGui
+import sys
 
 subjects=["","A","B","C","D","E","F","G"]
 temp=[]
+face_recognizer = cv2.face.LBPHFaceRecognizer_create()
+class App(QMainWindow):
+
+    def __init__(self):
+        super().__init__()
+        self.title = 'Face Recognition'
+        self.left = 10
+        self.top = 10
+        self.width = 520
+        self.height = 500
+        self.setFixedSize(400,400)
+        self.initUI()
+        self.setWindowIcon(QtGui.QIcon('icon.png'))
+        self.move(650,300)
+    def initUI(self):
+        self.setWindowTitle(self.title)
+        self.setGeometry(self.left, self.top, self.width, self.height)
+
+        self.button = QPushButton('Train', self)
+        self.button.setToolTip('This button starts training')
+        self.button.move(0, 0)
+        self.button.resize(400,200)
+        self.button.clicked.connect(self.on_click)
+
+        self.button2 = QPushButton('Test', self)
+        self.button2.setToolTip('This button shows us the result of test image')
+        self.button2.move(0, 200)
+        self.button2.resize(400, 200)
+        self.button2.clicked.connect(self.on_click2)
+        self.button2.setEnabled(False)
+
+
+        self.show()
+
+    @pyqtSlot()
+    def on_click(self):
+        trainingdata()
+        self.button2.setEnabled(True)
+
+
+    @pyqtSlot()
+    def on_click2(self):
+        testingdata()
+
+
+
 
 def predict(test_img):
 
@@ -102,30 +151,37 @@ def prepare_training_data(data_folder_path):
 
     return faces, labels
 
+def trainingdata():
 
-print("Preparing data...")
-faces, labels = prepare_training_data("/ImageRecognition/train")
-print("Data prepared")
+    print("Preparing data...")
+    faces, labels = prepare_training_data("/ImageRecognition/train")
+    print("Data prepared")
 
-# print total faces and labels
-print("Total faces: ", len(faces))
-print("Total labels: ", len(labels))
-
-face_recognizer = cv2.face.LBPHFaceRecognizer_create()
-face_recognizer.train(faces, np.array(labels))
+    # print total faces and labels
+    print("Total faces: ", len(faces))
+    print("Total labels: ", len(labels))
 
 
-print("Predicting images...")
+    face_recognizer.train(faces, np.array(labels))
 
-# load test images
-test_img1 = cv2.imread("try.jpg")
+def testingdata():
+
+    print("Predicting images...")
+
+    # load test images
+    test_img1 = cv2.imread("2.jpg")
 
 
-# perform a prediction
-predicted_img1 = predict(test_img1)
-print("Prediction complete")
+    # perform a prediction
+    predicted_img1 = predict(test_img1)
+    print("Prediction complete")
 
-# display both images
-cv2.imshow(subjects[1], predicted_img1)
-cv2.waitKey(0)
-cv2.destroyAllWindows()
+    # display both images
+    cv2.imshow(subjects[1], predicted_img1)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
+
+app = QApplication(sys.argv)
+window=App()
+window.show()
+app.exec_()
