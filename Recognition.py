@@ -1,13 +1,16 @@
 import cv2
 import numpy as np
 import os
-from PyQt5.QtWidgets import QApplication, QPushButton,QMainWindow
+from PyQt5.QtWidgets import QApplication, QPushButton,QMainWindow,QFileDialog
 from PyQt5.QtCore import pyqtSlot
 from PyQt5 import QtGui
 import sys
+from  PIL import Image
+import glob
 
 subjects=["","A","B","C","D","E","F","G"]
 temp=[]
+
 face_recognizer = cv2.face.LBPHFaceRecognizer_create()
 class App(QMainWindow):
 
@@ -50,6 +53,13 @@ class App(QMainWindow):
 
     @pyqtSlot()
     def on_click2(self):
+        filename = QFileDialog.getOpenFileName()
+        path=filename[0]
+        path=path.replace("/","\\\\")
+        print(path)
+        with Image.open(path) as img:
+            img.save("test.jpg")
+
         testingdata()
 
 
@@ -169,7 +179,7 @@ def testingdata():
     print("Predicting images...")
 
     # load test images
-    test_img1 = cv2.imread("2.jpg")
+    test_img1 = cv2.imread("test.jpg")
 
 
     # perform a prediction
