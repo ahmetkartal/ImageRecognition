@@ -6,7 +6,7 @@ from PyQt5.QtCore import pyqtSlot
 from PyQt5 import QtGui
 import sys
 from  PIL import Image
-import glob
+
 
 subjects=["","A","B","C","D","E","F","G"]
 temp=[]
