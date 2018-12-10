@@ -30,13 +30,14 @@ class App(QMainWindow):
         self.setGeometry(self.left, self.top, self.width, self.height)
 
         self.button = QPushButton('Train', self)
-        self.button.setToolTip('This button starts training')
+        self.button.setStyleSheet('font-size: 18pt; font-family: Comic Sans MS; color: White; background-color: #58D3F7;')
         self.button.move(0, 0)
         self.button.resize(400,200)
         self.button.clicked.connect(self.on_click)
 
         self.button2 = QPushButton('Test', self)
         self.button2.setToolTip('This button shows us the result of test image')
+
         self.button2.move(0, 200)
         self.button2.resize(400, 200)
         self.button2.clicked.connect(self.on_click2)
@@ -49,6 +50,8 @@ class App(QMainWindow):
     def on_click(self):
         trainingdata()
         self.button2.setEnabled(True)
+        self.button2.setStyleSheet('font-size: 18pt; font-family: Comic Sans MS; color: White; background-color: #58D3F7; ')
+
 
 
     @pyqtSlot()
